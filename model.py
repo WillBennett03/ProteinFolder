@@ -5,92 +5,58 @@
 
 ~ Will Bennett 17/06/2021
 
-This module contains the PyTorch code which creates the transformer model, The transformer model will be
-the initial encoder half of the model proposed by Attention is all you need paper aswell as tweaks here and there like 
-concatonating residue data with the sequence in the input embedding.
-
+Contains the Tensorflow Transformer model 
 """
-import torch
+import tensorflow as tf
+import numpy as np
 import math
+import matplotlib.pyplot as plt
 
-class PositionalEncoding(torch.nn.Module): #This class is from the word_langage_model example on pytorchs docs
-    r"""Inject some information about the relative or absolute position of the tokens
-        in the sequence. The positional encodings have the same dimension as
-        the embeddings, so that the two can be summed. Here, we use sine and cosine
-        functions of different frequencies.
-    .. math::
-        \text{PosEncoder}(pos, 2i) = sin(pos/10000^(2i/d_model))
-        \text{PosEncoder}(pos, 2i+1) = cos(pos/10000^(2i/d_model))
-        \text{where pos is the word position and i is the embed idx)
-    Args:
-        d_model: the embed dim (required).
-        dropout: the dropout value (default=0.1).
-        max_len: the max. length of the incoming sequence (default=5000).
-    Examples:
-        >>> pos_encoder = PositionalEncoding(d_model)
-    """
+class position_encoder: #position encoding
+    def __init__(self, pos, d_model):
+        self.pos = pos
+        self.d_model = d_model
+    
+    def get_angles(self, pos, i):
+        angle_rates = 1 / np.power(10000, (2 * (i//2)) / np.float32(self.d_model))
+        return pos * angle_rates
 
-    def __init__(self, d_model, dropout=0.1, max_len=5000):
-        super(PositionalEncoding, self).__init__()
-        self.dropout = torch.nn.Dropout(p=dropout)
+    def positional_encoding(self):
+        angle_rads = self.get_angles(np.arange(self.pos)[:, np.newaxis],
+                                np.arange(self.d_model)[np.newaxis, :])
 
-        pe = torch.zeros(max_len, d_model)
-        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
-        div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-math.log(10000.0) / d_model))
-        pe[:, 0::2] = torch.sin(position * div_term)
-        pe[:, 1::2] = torch.cos(position * div_term)
-        pe = pe.unsqueeze(0).transpose(0, 1)
-        self.register_buffer('pe', pe)
+        # apply sin to even indices in the array; 2i
+        angle_rads[:, 0::2] = np.sin(angle_rads[:, 0::2])
 
-    def forward(self, x):
-        r"""Inputs of forward function
-        Args:
-            x: the sequence fed to the positional encoder model (required).
-        Shape:
-            x: [sequence length, batch size, embed dim]
-            output: [sequence length, batch size, embed dim]
-        Examples:
-            >>> output = pos_encoder(x)
-        """
+        # apply cos to odd indices in the array; 2i+1
+        angle_rads[:, 1::2] = np.cos(angle_rads[:, 1::2])
 
-        x = x + self.pe[:x.size(0), :]
-        return self.dropout(x)
+        pos_encoding = angle_rads[np.newaxis, ...]
 
-class Model(torch.nn.Transformer): #the whole transformer models 
-    def __init__(self, ntoken, ninp, nhead, nhid, nlayers, dropout=0.5):
-        super(Model, self).__init__()
+        return tf.cast(pos_encoding, dtype=tf.float32)
+
+#Masking
+
+class Transformer:
+    def __init__(self, ntoken, d_model, nheads, output_features, nhid=2048, nlayers=6, dropout=0.1):
         self.model_type = 'Transformer'
         self.src_mask = None
-        self.pos_encoder = PositionalEncoding(ninp, dropout)
-        encoder_layers = torch.nn.TransformerEncoderLayer(ninp, nhead, nhid, dropout)
-        self.transformer_encoder = torch.nn.TransformerEncoder(encoder_layers, nlayers)
-        self.encoder = torch.nn.Embedding(ntoken, ninp)
-        self.ninp = ninp
-        
-        self.init_weights()
+        # self.pos_encoder = 
 
-    def init_weights(self):
-        initrange = 0.1
-        torch.nn.init.uniform_(self.encoder.weight, -initrange, initrange)
-        # torch.nn.init.zeros_(self.decoder.weight)
-        # torch.nn.init.uniform_(self.decoder.weight, -initrange, initrange)
+if __name__ == '__main__':
+    n, d = 2048, 512
+    PE = position_encoder(n, d)
+    pos_encoding = PE.positional_encoding()
+    print(pos_encoding.shape)
+    pos_encoding = pos_encoding[0]
 
-    def _generate_square_subsequent_mask(self, sz):
-        mask = (torch.triu(torch.ones(sz, sz)) == 1).transpose(0, 1)
-        mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
-        return mask
+    # Juggle the dimensions for the plot
+    pos_encoding = tf.reshape(pos_encoding, (n, d//2, 2))
+    pos_encoding = tf.transpose(pos_encoding, (2, 1, 0))
+    pos_encoding = tf.reshape(pos_encoding, (d, n))
 
-    def forward(self, src, has_mask=True):
-        if has_mask:
-            device = src.device
-            if self.src_mask is None or self.src_mask.size(0) != len(src):
-                mask = self._generate_square_subsequent_mask(len(src)).to(device)
-                self.src_mask = mask
-        else:
-            self.src_mask = None
-
-        src = self.encoder(src) * math.sqrt(self.ninp)
-        src = self.pos_encoder(src)
-        output = self.transformer_encoder(src, self.src_mask)
-        # output = self.decoder(output)
-        return torch.nn.functional.log_softmax(output, dim=-1)
+    plt.pcolormesh(pos_encoding, cmap='RdBu')
+    plt.ylabel('Depth')
+    plt.xlabel('Position')
+    plt.colorbar()
+    plt.show()
