@@ -1,0 +1,173 @@
+{
+    "A" : {
+        "Polar" : 0,
+        "Aliphatic" : 1,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 0
+    },
+    "R" : {
+        "Polar" : 1,
+        "Aliphatic" : 0,
+        "Charge": 1,
+        "Hydrophobic": -1,
+        "pK" : 0,
+        "Aromatic" : 0
+    },
+    "N" : {
+        "Polar" : 0,
+        "Aliphatic" : 0,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 0
+    },
+    "D" : {
+        "Polar" : 1,
+        "Aliphatic" : 0,
+        "Charge": -1,
+        "Hydrophobic": -1,
+        "pK" : 3.9,
+        "Aromatic" : 0
+    },
+    "C" : {
+        "Polar" : 1,
+        "Aliphatic" : 0,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 0
+    },
+    "E" : {
+        "Polar" : 1,
+        "Aliphatic" : 0,
+        "Charge": -1,
+        "Hydrophobic": -1,
+        "pK" : 4.2,
+        "Aromatic" : 0
+    },
+    "Q" : {
+        "Polar" : 1,
+        "Aliphatic" : 0,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 0
+    },
+    "G" : {
+        "Polar" : 0,
+        "Aliphatic" : 0,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 0
+    },
+    
+    "H" : {
+        "Polar" : 1,
+        "Aliphatic" : 0,
+        "Charge": 1,
+        "Hydrophobic": -1,
+        "pK" : 6.0,
+        "Aromatic" : 0
+    },
+    
+    "I" : {
+        "Polar" : 0,
+        "Aliphatic" : 1,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 0
+    },
+    
+    "L" : {
+        "Polar" : 0,
+        "Aliphatic" : 1,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 0
+    },
+    
+    "K" : {
+        "Polar" : 1,
+        "Aliphatic" : 0,
+        "Charge": 1,
+        "Hydrophobic": -1,
+        "pK" : 10.5,
+        "Aromatic" : 0
+    },
+    
+    "M" : {
+        "Polar" : 1,
+        "Aliphatic" : 0,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 0
+    },
+    
+    "F" : {
+        "Polar" : 0,
+        "Aliphatic" : 0,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 1
+    },
+
+    "P" : {
+        "Polar" : 0,
+        "Aliphatic" : 1,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 0
+    },    
+    
+    "S" : {
+        "Polar" : 1,
+        "Aliphatic" : 0,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 0
+    },
+    
+    "T" : {
+        "Polar" : 1,
+        "Aliphatic" : 0,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 0
+    },
+    
+    "W" : {
+        "Polar" : 0,
+        "Aliphatic" : 0,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 1
+    },
+    
+    "Y" : {
+        "Polar" : 0,
+        "Aliphatic" : 0,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 1
+    },
+    "V" : {
+        "Polar" : 0,
+        "Aliphatic" : 1,
+        "Charge": 0,
+        "Hydrophobic": 0,
+        "pK" : 0,
+        "Aromatic" : 0
+    }
+}
